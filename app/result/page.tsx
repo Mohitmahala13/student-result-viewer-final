@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Student } from "@/types/student";
 import { students as defaultStudents } from "@/data/students";
 import { getStudents } from "@/lib/studentStorage";
 import { useSearchParams } from "next/navigation";
 import { FaUserGraduate, FaPrint } from "react-icons/fa";
 
-export default function ResultPage() {
+function ResultContent() {
   const searchParams = useSearchParams();
   const roll = searchParams.get("roll");
   const [students, setStudents] = useState<Student[]>([]);
@@ -237,5 +237,19 @@ const remarks =
       </div>
 
     </main>
+  );
+}
+
+export default function ResultPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen flex items-center justify-center">
+          <h1 className="text-2xl font-bold">Loading...</h1>
+        </main>
+      }
+    >
+      <ResultContent />
+    </Suspense>
   );
 }
